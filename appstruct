@@ -1,0 +1,20 @@
+thermac_library/
+│
+├── static/
+│   ├── css/
+│   │   └── styles.css
+│   ├── images/
+│   │   └── (images for carousel and about us)
+│   └── js/
+│       └── (any JS files if needed)
+│
+├── templates/
+│   ├── base.html
+│   ├── home.html
+│   ├── contact.html
+│   ├── about.html
+│   └── books.html
+│
+├── app.py
+├── books.json
+└── requirements.txt

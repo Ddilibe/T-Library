@@ -1,0 +1,22 @@
+body {
+    background-color: #f0f5f5; /* Light green shade */
+}
+
+.navbar {
+    background-color: #006400; /* Dark green shade */
+}
+
+.footer {
+    background-color: #006400; /* Dark green shade */
+    color: white;
+}
+
+.btn-primary {
+    background-color: #008000; /* Medium green shade */
+    border-color: #008000;
+}
+
+.carousel-item img {
+    max-height: 500px;
+    object-fit: cover;
+}

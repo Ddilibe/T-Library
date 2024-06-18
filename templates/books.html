@@ -1,72 +1,78 @@
-{% extends 'header.html'%}
-{% block body %}
+{% extends "base.html" %}
+{% block content %}
 <div class="container">
-   <div class="row">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-         <h2 class="text-center text-secondary-emphasis text-uppercase fs-10 fw-bolder my-3">Our Books</h2>
-      </div>
-   </div>
-</div>
-<!--Books -->
-<div class="Books">
-   <div class="container">
-      <div class="row">
-         <div class="col-md-10 offset-md-1">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
             <div class="titlepage">
-               <span>
-                  From the towering tomes of thermodynamics to the complexities of fluid mechanics, every inch of our
-                  collection is dedicated to your engineering journey. We house the classics that laid the foundation
-                  and the cutting-edge research that pushes the boundaries.</span>
+                <h1 class="text-center">Our Books</h1>
+                <p class="text-center">
+                    Thermac Library has been a game changer in the reservation of knowledge. From the towering tomes of
+                    thermodynamics
+                    to the complexities of fluid mechanics, every inch of our collection is dedicated to your
+                    engineering journey.
+                    We
+                    house the classics that laid the foundation and the cutting-edge research that pushes the
+                    boundaries. Utilize
+                    our
+                    online catalog to find and download digital books.
+                </p>
             </div>
-         </div>
-      </div>
-      <div class="row box">
-         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+        </div>
+    </div>
+    <div class="row center">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
             <div class="book-box">
-               <figure><img src="{{url_for('static', filename='images/thermo.jpg')}}" alt="img" /></figure>
+                <figure><img src="{{url_for('static', filename='images/a.jpg')}}" alt="img" /></figure>
             </div>
-         </div>
-         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
             <div class="book-box">
-               <figure><img
-                     src="{{url_for('static', filename='images/main-qimg-f4e2fe14e1085c7a3d16cf4e7ea05baf-pjlq.jpg')}}"
-                     alt="img" /></figure>
+                <figure><img src="{{url_for('static', filename='images/c.jpg')}}" alt="img" /></figure>
             </div>
-         </div>
-         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12">
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
             <div class="book-box">
-               <figure><img src="{{url_for('static', filename='images/fluid.jpg')}}" alt="img" /></figure>
+                <figure><img src="{{url_for('static', filename='images/b.jpg')}}" alt="img" /></figure>
             </div>
-         </div>
-         <div class="col-md-6 offset-md-3">
-            <p>Come wander our aisles, lose yourself in the pages, and discover the magic that awaits within the walls
-               of our library</p>
-         </div>
-      </div>
-   </div>
+        </div>
+    </div>
 </div>
 <div class="container">
-   <div class="row">
-      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-         <h2 class="text-center text-secondary-emphasis text-uppercase fs-10 fw-bolder my-3">Search Our Digital Library
-         </h2>
-      </div>
-   </div>
+    <h2 class="text-center">Search for Books</h2>
+    <form method="post" action="/books">
+        <div class="form-group row">
+            <label for="search_query" class="col-md-1" style="margin-top: 1%;">SEARCH:</label>
+            <input type="text" class="form-control col-md-8" id="search_query" name="search_query"
+                placeholder="Enter book name">
+            <button type="submit" class="btn btn-primary col-md-1">Search</button>
+        </div>
+    </form>
+    <br>
+    {% if books %}
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Level</th>
+                <th>Size</th>
+                <th>Download Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.a }}</td>
+                <td>{{ book.b }}</td>
+                <td>{{ book.c }}</td>
+                <td>{{ book.d }}</td>
+                <td><a href="{{ book.e }}" class="btn btn-success">Download</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="text-center">No books found</p>
+    {% endif %}
 </div>
-<div class="container">
-   <form class="row g-3">
-      <div class="col-9">
-         <input type="text" class="form-control" id="staticEmail2" value="Serach by Book title or author">
-      </div>
-      <div class="col-2">
-         <button class="btn btn-primary mb-3" id="searching">Search</button>
-      </div>
-   </form>
-</div>
-<div class="container my-6">
-   <div class="row my-5" id="alltables">
-   </div>
-</div>
-<!-- end Books -->
-<!-- footer -->
 {% endblock %}
