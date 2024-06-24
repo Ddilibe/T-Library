@@ -1,0 +1,42 @@
+/* Custom styles */
+body {
+    background-color: #f0f5f5; /* Light green shade */
+}
+
+.navbar {
+    background-color: #006400; /* Dark green shade */
+}
+
+.footer {
+    background-color: #006400; /* Dark green shade */
+    color: white;
+}
+
+.btn-primary {
+    background-color: #008000; /* Medium green shade */
+    border-color: #008000;
+}
+
+.carousel-item img {
+    max-height: 500px;
+    object-fit: cover;
+}
+
+.card-img-top {
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #006400; /* Dark green shade */
+    border-color: #006400;
+}
+
+.pagination .page-link {
+    color: #006400; /* Dark green shade */
+}
+
+.pagination .page-link:hover {
+    background-color: #f0f5f5; /* Light green shade */
+    border-color: #006400;
+}

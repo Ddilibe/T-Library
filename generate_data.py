@@ -57,8 +57,9 @@ headers = {
 # }"""
 }
 # change_header = lambda x : {keys.replace(':', ""):values for keys, values in headers.items}
-def get_size(soup):
+def get_size(soup, num, arg):
     text = soup.find_all("span", attrs={"class": "jApF8d"})
+    text = text[len(text)-(arg+1):] if num else text
     all_size = [i.attrs.get('aria-label').replace('Size: ', '') for i in text if text.index(i)%2 == 1]
     return all_size
 
@@ -78,6 +79,8 @@ def determine_type(title):
         return "Past Question"
     elif "text" in title:
         return "Textbook"
+    elif 'CA' in title.lower() or 'filler' in title.lower():
+        return "CA Filler"
     elif "q&a" in title:
         return "Past Question"
     else:
@@ -85,13 +88,12 @@ def determine_type(title):
 
 clean_list = lambda x: x.split(",")
 
-def main():
-    data = requests.get('https://drive.google.com/drive/folders/1BgAByQ-FfbDeqVJdMc_YnO99idwjol7Q', headers=headers)
+def main(url, links, grade, arg, num=False):
+    data = requests.get(url, headers=headers)
     soup = BeautifulSoup(data.text, "html.parser")
     a = soup.find_all("div", attrs={"class": "KL4NAf"})
     title = [i.getText() for i in a]
-    all_size = get_size(soup)
-    links = "https://drive.google.com/file/d/1x06zHQ192Tbn2RFpnWSBD2d1ad5y8oTr/view?usp=drive_link, https://drive.google.com/file/d/1R0dYydMjR1KovLNuxT3FH2tTEwrj7YTL/view?usp=drive_link, https://drive.google.com/file/d/1WVK_1ZFOVIjDvXTRi0UBCCEivnut4s4m/view?usp=drive_link, https://drive.google.com/file/d/1rZub5JQ9UMZdFndR8YRMBgZ0-1rCsFnB/view?usp=drive_link, https://drive.google.com/file/d/1o3mXSgoAdmdjdqRFOVj5fS8l_BW472Y9/view?usp=drive_link"
+    all_size = get_size(soup, num, arg)
     links = clean_list(links)
     print(title, links, all_size)
     # set_trace()
@@ -99,10 +101,136 @@ def main():
         write_to_file(
             title[i].translate(str.maketrans(string.punctuation, ' '*len(string.punctuation))),
             determine_type(title[i]), 
-            "200L", 
+            grade, 
             all_size[i], 
             links[i].strip()
             )
 
 if "__main__" == __name__:
-    main()
+    all_data = [
+        {  
+            'url': 'https://drive.google.com/drive/folders/1sodACivL7PnnWmZsf70nioxb5OMwgu0T',
+            'links': 'https://drive.google.com/file/d/1eWfE0Z9tkYYQj1ANIxwqBHxP58dQah8u/view?usp=drive_link, https://drive.google.com/file/d/1VjrEf8LyUfYt-WHuyTdfMiiMplPCpISE/view?usp=drive_link, https://drive.google.com/file/d/1EFSbvQihNAehSM34z-3EgeL4gxBxP_ZS/view?usp=drive_link, https://drive.google.com/file/d/1xMGzgVKQApvnJCtHWEG_ZPf-RxGpH71z/view?usp=drive_link',
+            'grade': '400L',
+            'num':False,
+        },
+        {  
+            'url': 'https://drive.google.com/drive/folders/1sTaLZqymb3WZiKOk67cKbA2wYaGa1MbK',
+            'links': 'https://drive.google.com/file/d/1mZVZz7Um9re_8-9iGXWAeXUw3mhYlcV5/view?usp=drive_link, https://drive.google.com/file/d/1SLOIPuYebLr-IG4XFA7FHyi6S7OwGUe2/view?usp=drive_link, https://drive.google.com/file/d/154t9Rew7Up1BForPY5k1Yplom8E3Bvs8/view?usp=drive_link',
+            'grade': '400L',
+            'num':False,
+        },
+        {  
+            'url': 'https://drive.google.com/drive/folders/1LuE22T79w49vPOtodE3Ivawppew8lqqk',
+            'links': 'https://drive.google.com/file/d/1hxTybMudsRlMEoKtDgxQmjc28_J0Iak7/view?usp=drive_link, https://drive.google.com/file/d/1wZdWdWUlvRLhOGQNBelmosEdk2Yie988/view?usp=drive_link, https://drive.google.com/file/d/1Ty7A8SE3mAaU1J6gyGuXn_LovP2dDIPM/view?usp=drive_link, https://drive.google.com/file/d/1S517QR08snie7KAiknmL0KJBGTo5sWVS/view?usp=drive_link, https://drive.google.com/file/d/194sGRYrA9noTCOyWjZmVaoyQHXJN65pa/view?usp=drive_link, https://drive.google.com/file/d/1e51Y3M0hSqts0dFl0FX6fwQqpKvNy3qk/view?usp=drive_link, https://drive.google.com/file/d/1vAjNbbD_Jje8CzmDGjd-wgt2qX9Tbt4h/view?usp=drive_link',
+            'grade': '400L',
+            'num':False,
+        },
+        {  
+            'url': 'https://drive.google.com/drive/folders/1-G4DWV_RBMtH_D185jED-0NHH9sUib-X',
+            'links': 'https://drive.google.com/file/d/1JQw6UyEQwYSof1mtPo4jpJCWyhZ2v73v/view?usp=drive_link, https://drive.google.com/file/d/1lPZm4KyxV7A3Cwj7Em1Hm_gut10eHed8/view?usp=drive_link',
+            'grade': '400L',
+            'num':False,
+        },
+        {  
+            'url': 'https://drive.google.com/drive/folders/1rYzUip_RaAdNy1jUPUWFBSwDAIE0Cot3',
+            'links': 'https://drive.google.com/file/d/1Lp6SDzRibdLAdtMvjyjwbDpDVJjRvAPU/view?usp=drive_link, https://drive.google.com/file/d/15RfQEbloMfxg3nZ5eDdTabqk3PNvAxgB/view?usp=drive_link',
+            'grade': '400L',
+            'num':False,
+        },
+        {  
+            'url': 'https://drive.google.com/drive/folders/1SrEk9jmbdMchAc8nfON7Dx7DsmTGx-V9',
+            'links': 'https://drive.google.com/file/d/1c6SIQbquXRAvSpLO5lxq94cj8yLaoPwr/view?usp=drive_link, https://drive.google.com/file/d/1TF9ErxDKvNjydav8HAHjHxTjJgCjafsi/view?usp=drive_link',
+            'grade': '400L',
+            'num':False,
+        },
+        {  
+            'url': 'https://drive.google.com/drive/folders/167hb7XKElfRHT7Pc7UCvOn2SUP6UWJFm',
+            'links': 'https://drive.google.com/file/d/1hUPKD19Uo4JctgJjwwtQQZ9Y3oA11omX/view?usp=drive_link, https://drive.google.com/file/d/11kqvHBIX-lFU9AqxeHAwiLb8WKK2nOKH/view?usp=drive_link',
+            'grade': '400L',
+            'num':False,
+        }
+    ]
+    #     {  
+    #         'url': 'https://drive.google.com/drive/folders/13D32YiiU4No0GD5IWtqnDUuizpnw4eRE',
+    #         'links': 'https://drive.google.com/file/d/1vcOKaYlVTYh7m6nTbSGyUirlCQMTd4jl/view?usp=drive_link, https://drive.google.com/file/d/1xXSGVtW9t_SjoaSe95iuBk3V3EfJQebh/view?usp=drive_link, https://drive.google.com/file/d/12MK3L9NHkSigefSMjtv7hZQcAYPWX-kf/view?usp=drive_link, https://drive.google.com/file/d/1T0WFcbkke1s5N1iaGK-g9ALG9mT-0iZX/view?usp=drive_link, https://drive.google.com/file/d/1FZYaZ8wFmOEPaGnyQfXQ91JIJum4UvKH/view?usp=drive_link',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': 'https://drive.google.com/drive/folders/1O0ajVASOK-MuyexomPOT-fOeuSgKk2nP',
+    #         'links': 'https://drive.google.com/file/d/1qDOvPiLurz5d9xaPNrLPzpQsY1MYqsVl/view?usp=drive_link, https://drive.google.com/file/d/1dLsRYwtYGxhBfZpw037yOziNBakZMTs3/view?usp=drive_link, https://drive.google.com/file/d/1oJuIovwOxNdfVKbMFf2JbqmIdf0F19nb/view?usp=drive_link, https://drive.google.com/file/d/1Ch2tF2qWf1Ps9VzpBdULzgapJr_OLdbr/view?usp=drive_link, https://drive.google.com/file/d/1kZHx9hJc6PKL6TX9v8HszLpiv4hxritV/view?usp=drive_link, https://drive.google.com/file/d/1dVakJvacudK25EGHcsPcbMU0CvU_wEQP/view?usp=drive_link, https://drive.google.com/file/d/1aAFxXB7UpjZFw6Y6HQXehFoSRoXa8vQk/view?usp=drive_link, https://drive.google.com/file/d/1rsVy68nVUwI5_fUj-UQPj3mpiD-eSghN/view?usp=drive_link, https://drive.google.com/file/d/1pK9HcLv3mPM0nUMdW7WDeGrS6U1Nesop/view?usp=drive_link, https://drive.google.com/file/d/1sDUKXqzyU4_luKHQmron1SQZv5iOw34q/view?usp=drive_link, https://drive.google.com/file/d/1YrmpsWkRNuINy-iVIGK5YNM0raBZtQ1u/view?usp=drive_link',
+    #         'grade': '500L',
+    #         'num': False
+    #     },
+    #     {  
+    #         'url': 'https://drive.google.com/drive/folders/1Hvx08XjNONh0K_wpNsLMifmXGF5i9CEw',
+    #         'links': 'https://drive.google.com/file/d/1T3uy95_91iFj0MqlQPQJyCnQHgfA_Qsm/view?usp=drive_link, https://drive.google.com/file/d/1QbSR_Gqe6w_Kxo5JO0iqiQoYduCRs6iw/view?usp=drive_link, https://drive.google.com/file/d/1qBwceITkXHDBy7luU-iHSIJJBp212b0n/view?usp=drive_link, https://drive.google.com/file/d/1iIPPCeibwohaX89DGnwVSGjxKEcZeScl/view?usp=drive_link, https://drive.google.com/file/d/17OWYptzXCZf3arnQZylEymdnGnkR_15L/view?usp=drive_link, https://drive.google.com/file/d/1PZjg5t-lxuV__MLPtBvN09FQSLbNVu9L/view?usp=drive_link, https://drive.google.com/file/d/1rvbflQXiY4wCFpf_iIaPi3_VvEpvugJs/view?usp=drive_link, https://drive.google.com/file/d/1nwZ9YcD955vqcrXUwHpVYw2EI85D2fk6/view?usp=drive_link, https://drive.google.com/file/d/1S9bdwYP-IaUli9r2oVnjYUPlFdRgPOYu/view?usp=drive_link',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': 'https://drive.google.com/drive/folders/1ZOGeIi3p5BU6LfaPuiNiNsFytj2V3V7t',
+    #         'links': 'https://drive.google.com/file/d/1yQIUxl8mBr2MlKpqrR8M-2KzYMHtXHuD/view?usp=drive_link, https://drive.google.com/file/d/1i1B9GTzo0NkKfBVCDlNDX_bFM7TpF4zz/view?usp=drive_link, https://drive.google.com/file/d/1I4NMLeO9qOH87MfJUJnXVa1OvA9EhV5_/view?usp=drive_link, https://drive.google.com/file/d/1VyPw_3bP5jtLZEGAYXPnwFaURNjat3je/view?usp=drive_link, https://drive.google.com/file/d/1K7Zu-pIamgy-LtF29gbm8SoR5tWKxlQF/view?usp=drive_link, https://drive.google.com/file/d/1cRyemssa9h-iZmsey3L4MIKkc1bgT1z8/view?usp=drive_link',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+    #     {  
+    #         'url': '',
+    #         'links': '',
+    #         'grade': '500L',
+    #         'num':True
+    #     },
+        
+    # # ]
+    for i in all_data:
+        main(i['url'], i['links'], i['grade'], i.get('arg'), i['num'])
+        print(f"Done with {i['grade']}")
