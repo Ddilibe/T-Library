@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 import json
+import math
 
 app = Flask(__name__)
 
 # Load books data from JSON file
 with open('books.json', 'r') as file:
     books_data = json.load(file)
+typing = 'post'
 
 @app.route('/')
 def home():
@@ -34,14 +36,23 @@ def paginate_books(page, per_page):
 @app.route('/books', methods=['GET', 'POST'])
 def books():
     page = request.args.get('page', 1, type=int)
+    search_query = request.args.get('search_query', '', type=str)
     per_page = 10
-    paginated_books = paginate_books(page, per_page)
-    total_pages = (len(books_data) + per_page - 1) // per_page
+    if search_query != '':
+        request.method, request.form = 'POST', {'search_query':search_query}
     if request.method == 'POST':
         search_query = request.form['search_query'].lower()
         filtered_books = [book for book in books_data if search_query in book['a'].lower()]
-        return render_template('books.html', books=filtered_books, page=page, total_pages=total_pages)
-    return render_template('books.html', books=paginated_books, page=page, total_pages=total_pages)
+    else:
+        search_query = ""
+        filtered_books = books_data
+    total_books = len(filtered_books)
+    total_pages = math.ceil(total_books / per_page)
+    start = (page - 1)*per_page
+    end = start + per_page   
+    books_to_display = filtered_books[start:end] 
+        # return render_template('books.html', books=filtered_books, page=page, total_pages=total_pages)
+    return render_template('books.html', search_query=search_query, books=books_to_display, page=page, total_pages=total_pages)
 
 if __name__ == '__main__':
     app.run(debug=True)
